@@ -78,5 +78,13 @@ func (d device) fromPathOrDefault() *specs.DeviceNode {
 		Minor:       dn.Minor,
 		FileMode:    &dn.FileMode,
 		Permissions: string(dn.Permissions),
+		GID:         ptrIfNonZero(dn.Gid),
 	}
+}
+
+func ptrIfNonZero(id uint32) *uint32 {
+	if id == 0 {
+		return nil
+	}
+	return &id
 }
