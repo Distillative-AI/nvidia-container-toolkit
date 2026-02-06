@@ -177,6 +177,11 @@ func newAutomaticCDISpecModifier(logger logger.Interface, cfg *config.Config, de
 
 	cdiModeIdentifiers := cdiModeIdentfiersFromDevices(devices...)
 
+	nvcdiFeatureFlags := cfg.NVIDIAContainerRuntimeConfig.Modes.JitCDI.NVCDIFeatureFlags
+	if cfg.Features.NoAdditionalGIDsForDeviceNodes.IsEnabled() {
+		nvcdiFeatureFlags = append(nvcdiFeatureFlags, nvcdi.FeatureDisableMultipleCSVDevices)
+	}
+
 	logger.Debugf("Per-mode identifiers: %v", cdiModeIdentifiers)
 	var modifiers oci.SpecModifiers
 	for _, mode := range cdiModeIdentifiers.modes {
